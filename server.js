@@ -25,7 +25,7 @@ app.get("/", (req, res) => {
         
         body {
             font-family: 'Segoe UI', Tahoma, sans-serif;
-            background: #0f0f0f;
+            background: #0a0a0a;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -34,111 +34,85 @@ app.get("/", (req, res) => {
         }
         
         .container {
-            background: #1a1a1a;
-            padding: 30px;
-            border-radius: 16px;
+            background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
+            padding: 35px;
+            border-radius: 20px;
             width: 100%;
             max-width: 900px;
-            border: 1px solid #333;
+            border: 1px solid #2a2a2a;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
         }
         
         h1 {
             color: #fff;
             text-align: center;
-            margin-bottom: 25px;
-            font-weight: 500;
-            font-size: 24px;
+            margin-bottom: 30px;
+            font-weight: 600;
+            font-size: 28px;
+            background: linear-gradient(90deg, #e50914, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         
         .input-group {
             display: flex;
             gap: 12px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
         
         input {
             flex: 1;
-            padding: 14px 18px;
-            border: 1px solid #333;
-            border-radius: 8px;
-            background: #252525;
+            padding: 16px 20px;
+            border: 2px solid #2a2a2a;
+            border-radius: 12px;
+            background: #151515;
             color: #fff;
-            font-size: 14px;
+            font-size: 15px;
             outline: none;
-            transition: border-color 0.2s;
+            transition: all 0.3s;
         }
         
         input:focus {
             border-color: #e50914;
+            box-shadow: 0 0 20px rgba(229,9,20,0.2);
         }
         
         input::placeholder {
-            color: #666;
+            color: #555;
         }
         
         button {
-            padding: 14px 28px;
-            background: #e50914;
+            padding: 16px 35px;
+            background: linear-gradient(135deg, #e50914, #b20710);
             color: #fff;
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.2s;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.3s;
             white-space: nowrap;
         }
         
         button:hover {
-            background: #f40612;
-            transform: scale(1.02);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(229,9,20,0.4);
         }
         
         button:disabled {
-            background: #444;
+            background: #333;
             cursor: not-allowed;
             transform: none;
-        }
-        
-        .progress-container {
-            background: #252525;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-            display: none;
-        }
-        
-        .progress-container.show {
-            display: block;
-        }
-        
-        .progress-bar {
-            height: 8px;
-            background: #333;
-            border-radius: 4px;
-            overflow: hidden;
-            margin-bottom: 12px;
-        }
-        
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #e50914, #ff6b6b);
-            width: 0%;
-            transition: width 0.3s ease;
-            border-radius: 4px;
-        }
-        
-        .progress-text {
-            color: #aaa;
-            font-size: 13px;
-            text-align: center;
+            box-shadow: none;
         }
         
         .video-container {
             display: none;
-            border-radius: 12px;
+            border-radius: 16px;
             overflow: hidden;
             background: #000;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
         }
         
         .video-container.show {
@@ -151,10 +125,11 @@ app.get("/", (req, res) => {
         }
         
         .status {
-            color: #888;
+            color: #666;
             text-align: center;
-            font-size: 13px;
-            margin-top: 15px;
+            font-size: 14px;
+            margin-top: 20px;
+            min-height: 20px;
         }
         
         .status.error {
@@ -164,6 +139,45 @@ app.get("/", (req, res) => {
         .status.success {
             color: #46d369;
         }
+        
+        .status.loading {
+            color: #ffa500;
+        }
+
+        .loader {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+        
+        .loader.show {
+            display: flex;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #222;
+            border-top-color: #e50914;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .info {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-top: 20px;
+            color: #888;
+            font-size: 13px;
+            text-align: center;
+        }
 
         @media (max-width: 600px) {
             .input-group {
@@ -171,6 +185,9 @@ app.get("/", (req, res) => {
             }
             button {
                 width: 100%;
+            }
+            .container {
+                padding: 25px;
             }
         }
     </style>
@@ -184,11 +201,8 @@ app.get("/", (req, res) => {
             <button id="btn">پخش</button>
         </div>
 
-        <div class="progress-container" id="progress">
-            <div class="progress-bar">
-                <div class="progress-fill" id="fill"></div>
-            </div>
-            <div class="progress-text" id="text">در حال دانلود... 0%</div>
+        <div class="loader" id="loader">
+            <div class="spinner"></div>
         </div>
 
         <div class="video-container" id="player">
@@ -196,20 +210,24 @@ app.get("/", (req, res) => {
         </div>
 
         <p class="status" id="status"></p>
+        
+        <div class="info">
+            💡 ویدیو مستقیم استریم میشه - نیازی به دانلود کامل نیست
+        </div>
     </div>
 
     <script>
-        const url = document.getElementById('url');
+        const urlInput = document.getElementById('url');
         const btn = document.getElementById('btn');
-        const progress = document.getElementById('progress');
-        const fill = document.getElementById('fill');
-        const text = document.getElementById('text');
+        const loader = document.getElementById('loader');
         const player = document.getElementById('player');
         const video = document.getElementById('video');
         const status = document.getElementById('status');
 
-        btn.onclick = async () => {
-            if (!url.value.trim()) {
+        btn.onclick = () => {
+            const url = urlInput.value.trim();
+            
+            if (!url) {
                 status.textContent = 'لطفاً لینک را وارد کنید';
                 status.className = 'status error';
                 return;
@@ -217,74 +235,36 @@ app.get("/", (req, res) => {
 
             btn.disabled = true;
             btn.textContent = 'صبر کنید...';
-            progress.classList.add('show');
+            loader.classList.add('show');
             player.classList.remove('show');
-            status.textContent = '';
-            fill.style.width = '0%';
+            status.textContent = 'در حال بارگذاری...';
+            status.className = 'status loading';
 
-            try {
-                const res = await fetch('/download', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ url: url.value.trim() })
-                });
-
-                const data = await res.json();
-
-                if (data.error) {
-                    status.textContent = data.error;
-                    status.className = 'status error';
-                    reset();
-                    return;
-                }
-
-                checkProgress(data.id);
-
-            } catch (e) {
-                status.textContent = 'خطا در اتصال به سرور';
+            // ساخت لینک استریم
+            const streamUrl = '/stream?url=' + encodeURIComponent(url);
+            
+            video.src = streamUrl;
+            
+            video.onloadeddata = () => {
+                loader.classList.remove('show');
+                player.classList.add('show');
+                status.textContent = 'آماده پخش ✓';
+                status.className = 'status success';
+                btn.disabled = false;
+                btn.textContent = 'پخش';
+                video.play();
+            };
+            
+            video.onerror = () => {
+                loader.classList.remove('show');
+                status.textContent = 'خطا در بارگذاری ویدیو';
                 status.className = 'status error';
-                reset();
-            }
+                btn.disabled = false;
+                btn.textContent = 'پخش';
+            };
         };
 
-        function checkProgress(id) {
-            const interval = setInterval(async () => {
-                try {
-                    const res = await fetch('/status/' + id);
-                    const data = await res.json();
-
-                    fill.style.width = data.progress + '%';
-                    text.textContent = 'در حال دانلود... ' + data.progress + '%';
-
-                    if (data.done) {
-                        clearInterval(interval);
-                        progress.classList.remove('show');
-                        player.classList.add('show');
-                        video.src = '/stream/' + id;
-                        video.play();
-                        status.textContent = 'آماده پخش ✓';
-                        status.className = 'status success';
-                        reset();
-                    }
-
-                    if (data.error) {
-                        clearInterval(interval);
-                        status.textContent = 'خطا در دانلود';
-                        status.className = 'status error';
-                        reset();
-                    }
-                } catch (e) {
-                    clearInterval(interval);
-                }
-            }, 300);
-        }
-
-        function reset() {
-            btn.disabled = false;
-            btn.textContent = 'پخش';
-        }
-
-        url.onkeypress = (e) => {
+        urlInput.onkeypress = (e) => {
             if (e.key === 'Enter') btn.click();
         };
     </script>
@@ -293,120 +273,77 @@ app.get("/", (req, res) => {
     `);
 });
 
-// ذخیره موقت دانلودها (در RAM)
-const downloads = new Map();
-
-// شروع دانلود
-app.post("/download", (req, res) => {
-  const { url } = req.body;
+// استریم مستقیم ویدیو (بدون ذخیره در RAM)
+app.get("/stream", (req, res) => {
+  const url = req.query.url;
 
   if (!url) {
-    return res.json({ error: "لینک وارد نشده" });
+    return res.status(400).send("URL required");
   }
-
-  const id = Date.now().toString();
-  const chunks = [];
-  let totalSize = 0;
-  let downloaded = 0;
-
-  downloads.set(id, {
-    chunks,
-    progress: 0,
-    done: false,
-    error: false,
-    contentType: "video/mp4",
-  });
 
   const protocol = url.startsWith("https") ? https : http;
 
-  const request = protocol
-    .get(url, (response) => {
-      totalSize = parseInt(response.headers["content-length"], 10) || 0;
+  // ساخت headers برای درخواست
+  const options = {
+    headers: {
+      "User-Agent":
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+    },
+  };
 
-      const contentType = response.headers["content-type"];
-      if (contentType) {
-        downloads.get(id).contentType = contentType;
+  // اگه Range header داشت (برای seek کردن)
+  if (req.headers.range) {
+    options.headers.Range = req.headers.range;
+  }
+
+  const request = protocol
+    .get(url, options, (response) => {
+      // اگه redirect بود
+      if (response.statusCode === 301 || response.statusCode === 302) {
+        const redirectUrl = response.headers.location;
+        return res.redirect("/stream?url=" + encodeURIComponent(redirectUrl));
       }
 
-      response.on("data", (chunk) => {
-        chunks.push(chunk);
-        downloaded += chunk.length;
-        if (totalSize > 0) {
-          downloads.get(id).progress = Math.round(
-            (downloaded / totalSize) * 100
-          );
-        }
-      });
+      // کپی headers از سرور اصلی
+      const headers = {
+        "Content-Type": response.headers["content-type"] || "video/mp4",
+        "Accept-Ranges": "bytes",
+      };
 
-      response.on("end", () => {
-        const dl = downloads.get(id);
-        dl.done = true;
-        dl.progress = 100;
-        dl.buffer = Buffer.concat(chunks);
-        dl.chunks = null;
+      if (response.headers["content-length"]) {
+        headers["Content-Length"] = response.headers["content-length"];
+      }
 
-        // پاک کردن بعد از 10 دقیقه
-        setTimeout(() => downloads.delete(id), 10 * 60 * 1000);
+      if (response.headers["content-range"]) {
+        headers["Content-Range"] = response.headers["content-range"];
+      }
+
+      // ارسال status code
+      res.writeHead(response.statusCode, headers);
+
+      // پایپ مستقیم به کلاینت (بدون ذخیره در RAM)
+      response.pipe(res);
+
+      // اگه کاربر قطع کرد
+      req.on("close", () => {
+        response.destroy();
       });
     })
-    .on("error", () => {
-      downloads.get(id).error = true;
+    .on("error", (err) => {
+      console.error("Stream error:", err.message);
+      if (!res.headersSent) {
+        res.status(500).send("Error streaming video");
+      }
     });
 
-  request.setTimeout(60000, () => {
+  request.setTimeout(30000, () => {
     request.destroy();
-    downloads.get(id).error = true;
+    if (!res.headersSent) {
+      res.status(504).send("Timeout");
+    }
   });
-
-  res.json({ id });
-});
-
-// وضعیت دانلود
-app.get("/status/:id", (req, res) => {
-  const dl = downloads.get(req.params.id);
-  if (!dl) {
-    return res.json({ error: true });
-  }
-  res.json({
-    progress: dl.progress,
-    done: dl.done,
-    error: dl.error,
-  });
-});
-
-// پخش ویدیو
-app.get("/stream/:id", (req, res) => {
-  const dl = downloads.get(req.params.id);
-
-  if (!dl || !dl.buffer) {
-    return res.status(404).send("Not found");
-  }
-
-  const size = dl.buffer.length;
-  const range = req.headers.range;
-
-  if (range) {
-    const parts = range.replace(/bytes=/, "").split("-");
-    const start = parseInt(parts[0], 10);
-    const end = parts[1] ? parseInt(parts[1], 10) : size - 1;
-
-    res.writeHead(206, {
-      "Content-Range": `bytes ${start}-${end}/${size}`,
-      "Accept-Ranges": "bytes",
-      "Content-Length": end - start + 1,
-      "Content-Type": dl.contentType,
-    });
-
-    res.end(dl.buffer.slice(start, end + 1));
-  } else {
-    res.writeHead(200, {
-      "Content-Length": size,
-      "Content-Type": dl.contentType,
-    });
-    res.end(dl.buffer);
-  }
 });
 
 app.listen(PORT, () => {
-  console.log("🚀 http://localhost:" + PORT);
+  console.log("🚀 Server running on port " + PORT);
 });
